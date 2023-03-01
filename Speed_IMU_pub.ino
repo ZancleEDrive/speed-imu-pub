@@ -15,7 +15,6 @@ volatile int counter1=0;
 volatile int counter2=0;
 volatile int counter3=0;
 volatile int counter4=0;
-double WheelSpeed[4]={0,0,0,0};
 
 int sample_time_ms = 200;
 double sample_time_sec = (double)sample_time_ms/1000;
@@ -66,13 +65,6 @@ int32_t accelerometer[3];
 int32_t gyroscope[3];
 int32_t magnetometer[3];
 int32_t MagOffset[3];
-
-int counter;
-//valori iniziali accelerazione
-float acc_iniziale[3];
-//valori iniziali giroscopio
-float gyro_iniziale[3];
-
 
 
 LSM6DSLSensor AccGyr(&Wire);
@@ -159,7 +151,6 @@ float mapfloat(float x, float in_min, float in_max, float out_min, float out_max
 void setup() {
   /* Initialize Serial */
   Serial.begin(115200);
-  //pinMode(PC0,INPUT);
   pinMode(PB13,INPUT);
   pinMode(PB14,INPUT);
   pinMode(PB1,INPUT);
@@ -220,8 +211,7 @@ void setup() {
 
   /* Enable magnetometer calibration */
   MotionFX_MagCal_init(ALGO_PERIOD, 1);
-
-  //Serial.println("Please, slowly rotate the device in a figure 8 pattern in space to calibrate the magnetometer...");
+  
 
 
   nh.initNode();
@@ -238,7 +228,6 @@ void setup() {
   timer.refresh();
   timer.resume();
   
-  //attachInterrupt(PC0,motionfx,RISING);
   attachInterrupt(PB13,count1,RISING);
   attachInterrupt(PB14,count2,RISING);
   attachInterrupt(PB1,count3,RISING);
