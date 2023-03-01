@@ -89,14 +89,6 @@ float delta_time = MOTION_FX_ENGINE_DELTATIME;
 
 
 
-float variazione(float iniziale,float valore){
-  return valore -iniziale;
-}
-
-
-
-
-
 void count1() {
   counter1++;
 }
