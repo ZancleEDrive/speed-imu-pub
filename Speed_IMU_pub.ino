@@ -273,6 +273,7 @@ void loop() {
       
       all_measurement[5]=data_out.linear_acceleration[0];
       all_measurement[6]=data_out.linear_acceleration[1];
+    }
       msg.data=all_measurement;
       chatter.publish( &msg );  
   
@@ -293,7 +294,5 @@ void loop() {
   Serial.print(" ");
   Serial.print(all_measurement[6]);
   Serial.println(" ");
-    }
-
   
 }
