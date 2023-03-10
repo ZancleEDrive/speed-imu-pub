@@ -1,7 +1,9 @@
 # speed-imu-pub
 ros publisher node of wheels speed and imu 
 
-Boards used STM32 NUVLEO-64 F410RE      IMU IKS01A2
+## Boards used
+***STM32 NUCLEO-64 F410RE***    
+IMU ***IKS01A2*** / ***IKS02A1***
 
 In order to test the code connect the PINS PB13, PB14, PB1 and PB2 as it is shown in the figure, or directly to some encoders.
 
