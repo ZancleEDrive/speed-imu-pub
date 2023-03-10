@@ -82,7 +82,7 @@ int32_t magnetometer[3];
 int32_t MagOffset[3];
 
 
-LSM6DSLSensor AccGyr(&Wire);
+ISM330DHCXSensor AccGyr(&Wire);
 
 
 HardwareTimer *MyTim;
