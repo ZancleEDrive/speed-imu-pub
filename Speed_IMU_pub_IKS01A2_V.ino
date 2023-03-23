@@ -1,9 +1,14 @@
+/*
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
+*/
+
 
 #include <ros.h>
 #include <std_msgs/Float64MultiArray.h>
+#include <sensor_msgs/Imu.h>
 std_msgs::Float64MultiArray speed_msg;
+
 ros::Publisher Wheels("/autonomous_steer_bot/wheel_speed", &speed_msg);
 ros::NodeHandle nh;
 
@@ -115,10 +120,10 @@ void WheelsSpeed(){
   double angular_speed3 = (number_of_rounds3)/(sample_time_sec+timeNow_sec);
   double angular_speed4 = (number_of_rounds4)/(sample_time_sec+timeNow_sec);
  
-  all_measurement[0] = angular_speed1 * PI * diameter;
-  all_measurement[1] = angular_speed2 * PI * diameter;
-  all_measurement[2] = angular_speed3 * PI * diameter;
-  all_measurement[3] = angular_speed4 * PI * diameter;
+  speed_measurement[0] = angular_speed1 * PI * diameter;
+  speed_measurement[1] = angular_speed2 * PI * diameter;
+  speed_measurement[2] = angular_speed3 * PI * diameter;
+  speed_measurement[3] = angular_speed4 * PI * diameter;
   
   counter1 = 0;
   counter2 = 0;
@@ -207,8 +212,8 @@ void setup() {
 
 
   nh.initNode();
-  msg.data_length = 7;
-  nh.advertise(chatter);
+  speed_msg.data_length = 4;
+  nh.advertise(Wheels);
   
   MyTim = new HardwareTimer(TIM3);
   MyTim->setOverflow(ALGO_FREQ, HERTZ_FORMAT);
@@ -275,25 +280,11 @@ void loop() {
       all_measurement[6]=data_out.linear_acceleration[1];
       */
     }
-      speed_msg.data=all_measurement;
+      speed_msg.data=speed_measurement;
       Wheels.publish( &speed_msg );  
   
       nh.spinOnce();
     
   
-  Serial.print(all_measurement[0]);
-  Serial.print(" ");
-  Serial.print(all_measurement[1]);
-  Serial.print(" ");
-  Serial.print(all_measurement[2]);
-  Serial.print(" ");
-  Serial.print(all_measurement[3]);
-  Serial.print(" ");
-  Serial.print(all_measurement[4]);
-  Serial.print(" ");
-  Serial.print(all_measurement[5]);
-  Serial.print(" ");
-  Serial.print(all_measurement[6]);
-  Serial.println(" ");
-  
+ 
 }
