@@ -8,12 +8,12 @@
 #include <std_msgs/Float64MultiArray.h>
 #include <sensor_msgs/Imu.h>
 std_msgs::Float64MultiArray speed_msg;
-
+sensor_msgs::Imu imu_msg;
 ros::Publisher Wheels("/autonomous_steer_bot/wheel_speed", &speed_msg);
+ros::Publisher Imu("Imu", &imu_msg);
 ros::NodeHandle nh;
 
 float speed_measurement[4]={0,0,0,0};
-
 
 HardwareTimer timer(TIM4);
 volatile int counter1=0;
@@ -214,6 +214,7 @@ void setup() {
   nh.initNode();
   speed_msg.data_length = 4;
   nh.advertise(Wheels);
+  nh.advertise(Imu);
   
   MyTim = new HardwareTimer(TIM3);
   MyTim->setOverflow(ALGO_FREQ, HERTZ_FORMAT);
@@ -270,19 +271,30 @@ void loop() {
       {
         discardedCount++;
       }
-      /*
-      all_measurement[4]=data_out.rotation[0];
-      if(all_measurement[4]>180){
-        all_measurement[4]=mapfloat(all_measurement[4],180,360,-180,0);
+
+      
+     
+      if(data_out.rotation[0]>180){
+        data_out.rotation[0]=mapfloat(data_out.rotation[0],180,360,-180,0);
       }
       
-      all_measurement[5]=data_out.linear_acceleration[0];
-      all_measurement[6]=data_out.linear_acceleration[1];
-      */
+
+      
     }
+      //pubblica i dati sulla velocità
       speed_msg.data=speed_measurement;
       Wheels.publish( &speed_msg );  
-  
+
+      //imposta il messaggio con i dati dell'IMU
+      imu_msg.orientation.z=data_out.rotation[0];
+      imu_msg.orientation.x=data_out.rotation[1];
+      imu_msg.orientation.y=data_out.rotation[2];
+      imu_msg.linear_acceleration.x=data_out.linear_acceleration[0];
+      imu_msg.linear_acceleration.y=data_out.linear_acceleration[1];
+      imu_msg.linear_acceleration.z=data_out.linear_acceleration[2];
+
+      Imu.publish(&imu_msg);
+      
       nh.spinOnce();
     
   
