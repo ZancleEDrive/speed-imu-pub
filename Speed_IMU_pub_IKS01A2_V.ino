@@ -2,12 +2,12 @@
 #include "stm32f4xx_hal.h"
 
 #include <ros.h>
-#include <std_msgs/Float32MultiArray.h>
-std_msgs::Float32MultiArray msg;
-ros::Publisher chatter("chatter", &msg);
+#include <std_msgs/Float64MultiArray.h>
+std_msgs::Float64MultiArray speed_msg;
+ros::Publisher Wheels("/autonomous_steer_bot/wheel_speed", &speed_msg);
 ros::NodeHandle nh;
 
-float all_measurement[7]={0,0,0,0,0,0,0};
+float speed_measurement[4]={0,0,0,0};
 
 
 HardwareTimer timer(TIM4);
@@ -265,7 +265,7 @@ void loop() {
       {
         discardedCount++;
       }
-
+      /*
       all_measurement[4]=data_out.rotation[0];
       if(all_measurement[4]>180){
         all_measurement[4]=mapfloat(all_measurement[4],180,360,-180,0);
@@ -273,9 +273,10 @@ void loop() {
       
       all_measurement[5]=data_out.linear_acceleration[0];
       all_measurement[6]=data_out.linear_acceleration[1];
+      */
     }
-      msg.data=all_measurement;
-      chatter.publish( &msg );  
+      speed_msg.data=all_measurement;
+      Wheels.publish( &speed_msg );  
   
       nh.spinOnce();
     
